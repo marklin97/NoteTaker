@@ -14,6 +14,12 @@
         "categories": {
             "auth": {
                 "notetakerf12c1689": {}
+            },
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "d29taevnul6795",
+                    "type": "manual"
+                }
             }
         }
     }

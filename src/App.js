@@ -74,9 +74,9 @@ const App = () => {
       })
     })
     return () => {
-      // createNoteListener.unsubscribe()
-      // deleteNoteListener.unsubscribe()
-      // updateNoteListener.unsubscribe()
+      createNoteListener.unsubscribe()
+      deleteNoteListener.unsubscribe()
+      updateNoteListener.unsubscribe()
     }
   }, [])
 
