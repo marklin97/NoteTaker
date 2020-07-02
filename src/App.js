@@ -23,36 +23,44 @@ const App = () => {
   useEffect(() => {
     fetchNotes()
 
-    const createNoteListener = getUser().then(user => {
-      return API.graphql(
+    let createNoteListener = null
+
+    let deleteNodeListener = null
+
+    let updateNodeListener = null
+
+    getUser().then(user => {
+      createNoteListener = API.graphql(
         graphqlOperation(onCreateNote, { owner: user.username })
       ).subscribe({
         next: noteData => {
           const newNote = noteData.value.data.onCreateNote
+
           setNotes(prevState => {
             const prevNotes = prevState.filter(item => item.id !== newNote.id)
+
             return [...prevNotes, newNote]
           })
         }
       })
     })
-    const deleteNoteListener = getUser().then(user => {
-      return API.graphql(
+
+    getUser().then(user => {
+      deleteNodeListener = API.graphql(
         graphqlOperation(onDeleteNote, { owner: user.username })
       ).subscribe({
         next: noteData => {
           const deletedNote = noteData.value.data.onDeleteNote
-          setNotes(prevState => {
-            const updatedNotes = prevState.filter(
-              note => note.id !== deletedNote.id
-            )
-            return updatedNotes
+
+          setNotes(prevNotes => {
+            return prevNotes.filter(note => note.id !== deletedNote.id)
           })
         }
       })
     })
-    const updateNoteListener = getUser().then(user => {
-      return API.graphql(
+
+    getUser().then(user => {
+      updateNodeListener = API.graphql(
         graphqlOperation(onUpdateNote, { owner: user.username })
       ).subscribe({
         next: noteData => {
@@ -75,8 +83,8 @@ const App = () => {
     })
     return () => {
       createNoteListener.unsubscribe()
-      deleteNoteListener.unsubscribe()
-      updateNoteListener.unsubscribe()
+      deleteNodeListener.unsubscribe()
+      updateNodeListener.unsubscribe()
     }
   }, [])
 
